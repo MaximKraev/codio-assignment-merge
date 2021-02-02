@@ -20,21 +20,25 @@ function writeRes(res, file) {
 
 async function main() {
   let res
-
-  if (_.includes(baseFile, 'book')) {
-    console.log('book.json merge')
-    res = await bookMerge(base, local, remote)
-  } else if (_.includes(baseFile, 'metadata')) {
-    res = metadataMerge(base, local, remote)
-    console.log(res)
-  } else if (_.includes(baseFile, 'assessments')) {
-    res = await assessmentMerge(base, local, remote)
-  }
-  console.log('We done!!!')
-  if (res !== null) {
-    writeRes(res, mergedFile)
-    process.exit(0)
-  } else {
+  try {
+    if (_.includes(baseFile, 'book')) {
+      console.log('book.json merge')
+      res = await bookMerge(base, local, remote)
+    } else if (_.includes(baseFile, 'metadata')) {
+      res = await metadataMerge(base, local, remote)
+      console.log(res)
+    } else if (_.includes(baseFile, 'assessments')) {
+      res = await assessmentMerge(base, local, remote)
+    }
+    console.log('We done!!!')
+    if (res !== null) {
+      writeRes(res, mergedFile)
+      process.exit(0)
+    } else {
+      process.exit(1)
+    }
+  } catch(_) {
+    console.log(_)
     process.exit(1)
   }
 }
